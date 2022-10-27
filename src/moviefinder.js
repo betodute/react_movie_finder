@@ -46,6 +46,7 @@ class MovieFinder extends React.Component {
       <div className="container">
         <h1> OMG Movie Finder OMG </h1>
         <h3>{searchTerm}</h3>
+        <h3> OMG </h3>
         <div className="row">
           <div className="col-12">
             <form onSubmit={this.handleSubmit} className="form-inline my-4">
