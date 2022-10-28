@@ -16,7 +16,8 @@ var MovieFinder = function (_React$Component) {
 
     _this.state = {
       searchTerm: '',
-      results: []
+      results: [],
+      error: ""
     };
 
     _this.handleChange = _this.handleChange.bind(_this);
@@ -33,6 +34,8 @@ var MovieFinder = function (_React$Component) {
   }, {
     key: 'handleSubmit',
     value: function handleSubmit(event) {
+      var _this2 = this;
+
       event.preventDefault();
       var searchTerm = this.state.searchTerm; // ES6 Destructuring - an object is used because state is an object.
 
@@ -43,15 +46,26 @@ var MovieFinder = function (_React$Component) {
         // also worth noting how return does not have to return anything but can be used to close out the function
       }
 
-      fetch('https://www.omdbapi.com/?s=' + searchTerm + '&apikey=b7da8d63').then(function (response) {
+      var checkStatus = function checkStatus(response) {
         if (response.ok) {
           // .ok returns true if response status is 200-299
-          return response.json();
+          return response;
         }
         throw new Error('Request was either a 404 or 500');
-      }).then(function (data) {
-        console.log(data); // log the response data for now
+      };
+      var json = function json(response) {
+        return response.json();
+      };
+
+      fetch('https://www.omdbapi.com/?s=' + searchTerm + '&apikey=b7da8d63').then(checkStatus).then(json).then(function (data) {
+        if (data.Response === 'False') {
+          throw new Error(data.Error);
+        }
+        if (data.Response === 'True' && data.Search) {
+          _this2.setState({ results: data.Search, error: '' });
+        }
       }).catch(function (error) {
+        _this2.setState({ error: error.message });
         console.log(error);
       });
     }
@@ -60,20 +74,23 @@ var MovieFinder = function (_React$Component) {
     value: function render() {
       var _state = this.state,
           searchTerm = _state.searchTerm,
-          results = _state.results;
+          results = _state.results,
+          error = _state.error;
 
       return React.createElement(
         'div',
         { className: 'container' },
         React.createElement(
           'h1',
-          null,
-          ' OMG Movie Finder OMG '
+          { id: 'mainHeadline' },
+          ' omg Movie Finder omg '
         ),
         React.createElement(
           'h3',
-          null,
-          searchTerm
+          { id: 'searchTermTitle' },
+          ' ',
+          searchTerm,
+          ' '
         ),
         React.createElement(
           'div',
@@ -87,7 +104,7 @@ var MovieFinder = function (_React$Component) {
               React.createElement('input', {
                 type: 'text',
                 className: 'form-control mr-sm-2',
-                placeholder: 'frozen',
+                placeholder: 'Movie Title',
                 value: searchTerm,
                 onChange: this.handleChange
               }),
@@ -97,9 +114,14 @@ var MovieFinder = function (_React$Component) {
                 'Submit'
               )
             ),
-            results.map(function (movie) {
-              return null; // returns nothing for now
-            })
+            function () {
+              if (error) {
+                return error;
+              }
+              return results.map(function (movie) {
+                return React.createElement(Movie, { key: movie.imdbID, movie: movie });
+              });
+            }()
           )
         )
       );
@@ -110,5 +132,48 @@ var MovieFinder = function (_React$Component) {
 }(React.Component);
 
 ;
+
+var Movie = function Movie(props) {
+  var _props$movie = props.movie,
+      Title = _props$movie.Title,
+      Year = _props$movie.Year,
+      imdbID = _props$movie.imdbID,
+      Type = _props$movie.Type,
+      Poster = _props$movie.Poster; // ES6 destructuring
+
+  return React.createElement(
+    'div',
+    { className: 'row' },
+    React.createElement(
+      'div',
+      { className: 'col-4 col-md-3 mb-3' },
+      React.createElement(
+        'a',
+        { href: 'https://www.imdb.com/title/' + imdbID + '/', target: '_blank' },
+        React.createElement('img', { src: Poster, className: 'img-fluid' })
+      )
+    ),
+    React.createElement(
+      'div',
+      { className: 'col-8 col-md-9 mb-3' },
+      React.createElement(
+        'a',
+        { href: 'https://www.imdb.com/title/' + imdbID + '/', target: '_blank' },
+        React.createElement(
+          'h4',
+          null,
+          Title
+        ),
+        React.createElement(
+          'p',
+          null,
+          Type,
+          ' | ',
+          Year
+        )
+      )
+    )
+  );
+};
 
 ReactDOM.render(React.createElement(MovieFinder, null), document.getElementById('root'));
