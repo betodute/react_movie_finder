@@ -98,7 +98,7 @@ const Movie = (props) => {
       <div className="col-8 col-md-9 mb-3">
         <a href={`https://www.imdb.com/title/${imdbID}/`} target="_blank">
           <h4>{Title}</h4>
-          <p>{Type} | {Year}</p>
+          <p id="subRed">{Type} | {Year}</p>
         </a>
       </div>
     </div>

@@ -166,7 +166,7 @@ var Movie = function Movie(props) {
         ),
         React.createElement(
           'p',
-          null,
+          { id: 'subRed' },
           Type,
           ' | ',
           Year
