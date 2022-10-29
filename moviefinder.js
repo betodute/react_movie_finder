@@ -121,7 +121,7 @@ var MovieFinder = function (_React$Component) {
               }
               return results.map(function (movie) {
                 if (movie.Poster === 'N/A') {
-                  movie.Poster = "pic-not-available-final.jpg";
+                  movie.Poster = "src/pic-not-available-final.jpg";
                 };
                 console.log(movie.Poster);
                 return React.createElement(Movie, { key: movie.imdbID, movie: movie });

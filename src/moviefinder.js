@@ -79,7 +79,7 @@ class MovieFinder extends React.Component {
               }
               return results.map((movie) => {
                 if (movie.Poster === 'N/A') {
-                  movie.Poster = "pic-not-available-final.jpg"
+                  movie.Poster = "src/pic-not-available-final.jpg"
                 };
                 console.log(movie.Poster)
                 return <Movie key={movie.imdbID} movie={movie} />;
