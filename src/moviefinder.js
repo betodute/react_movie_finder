@@ -43,6 +43,7 @@ class MovieFinder extends React.Component {
           throw new Error(data.Error);
         }
         if (data.Response === 'True' && data.Search) {
+          console.log(data.Search);
           this.setState({ results: data.Search, error: '' });
         }
       })
@@ -58,6 +59,7 @@ class MovieFinder extends React.Component {
     return (
       <div className="container">
         <h1 id="mainHeadline"> omg Movie Finder omg </h1>
+        
         <h3 id="searchTermTitle"> {searchTerm} </h3>
         <div className="row">
           <div className="col-12">
@@ -76,6 +78,10 @@ class MovieFinder extends React.Component {
                 return error;
               }
               return results.map((movie) => {
+                if (movie.Poster === 'N/A') {
+                  movie.Poster = "pic-not-available-final.jpg"
+                };
+                console.log(movie.Poster)
                 return <Movie key={movie.imdbID} movie={movie} />;
               })
             })()}

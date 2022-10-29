@@ -62,6 +62,7 @@ var MovieFinder = function (_React$Component) {
           throw new Error(data.Error);
         }
         if (data.Response === 'True' && data.Search) {
+          console.log(data.Search);
           _this2.setState({ results: data.Search, error: '' });
         }
       }).catch(function (error) {
@@ -119,6 +120,10 @@ var MovieFinder = function (_React$Component) {
                 return error;
               }
               return results.map(function (movie) {
+                if (movie.Poster === 'N/A') {
+                  movie.Poster = "pic-not-available-final.jpg";
+                };
+                console.log(movie.Poster);
                 return React.createElement(Movie, { key: movie.imdbID, movie: movie });
               });
             }()
