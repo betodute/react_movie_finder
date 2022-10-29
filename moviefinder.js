@@ -111,7 +111,7 @@ var MovieFinder = function (_React$Component) {
               }),
               React.createElement(
                 'button',
-                { type: 'submit', className: 'btn btn-primary' },
+                { 'class': 'p-2', type: 'submit', className: 'btn btn-primary' },
                 'Submit'
               )
             ),
